@@ -1,1 +1,25 @@
-{"version":3,"file":"service-worker.js","sources":["../../../AppData/Local/Temp/1ab90a66a851f1fcb5117bb1fc433f01/service-worker.js"],"sourcesContent":["import {registerRoute as workbox_routing_registerRoute} from 'C:/Users/sepeh/projects/uni/car-parts/node_modules/workbox-routing/registerRoute.mjs';\nimport {StaleWhileRevalidate as workbox_strategies_StaleWhileRevalidate} from 'C:/Users/sepeh/projects/uni/car-parts/node_modules/workbox-strategies/StaleWhileRevalidate.mjs';\nimport {precacheAndRoute as workbox_precaching_precacheAndRoute} from 'C:/Users/sepeh/projects/uni/car-parts/node_modules/workbox-precaching/precacheAndRoute.mjs';/**\n * Welcome to your Workbox-powered service worker!\n *\n * You'll need to register this file in your web app.\n * See https://goo.gl/nhQhGp\n *\n * The rest of the code is auto-generated. Please don't update this file\n * directly; instead, make changes to your Workbox build configuration\n * and re-run your build process.\n * See https://goo.gl/2aRDsh\n */\n\n\n\n\n\n\n\n\nself.addEventListener('message', (event) => {\n  if (event.data && event.data.type === 'SKIP_WAITING') {\n    self.skipWaiting();\n  }\n});\n\n\n\n\n/**\n * The precacheAndRoute() method efficiently caches and responds to\n * requests for URLs in the manifest.\n * See https://goo.gl/S9QRab\n */\nworkbox_precaching_precacheAndRoute([\n  {\n    \"url\": \"app.js\",\n    \"revision\": \"d41d8cd98f00b204e9800998ecf8427e\"\n  },\n  {\n    \"url\": \"index.html\",\n    \"revision\": \"c6771b679e433e2deb618028a819a572\"\n  },\n  {\n    \"url\": \"manifest.json\",\n    \"revision\": \"b682fead3ac5416acec2666d45c083f3\"\n  }\n], {});\n\n\n\n\nworkbox_routing_registerRoute(/\\.(?:html|js|css|wasm)$/, new workbox_strategies_StaleWhileRevalidate(), 'GET');\n\n\n\n\n"],"names":["self","addEventListener","event","data","type","skipWaiting","workbox_precaching_precacheAndRoute","url","revision","workbox","registerRoute","workbox_strategies_StaleWhileRevalidate"],"mappings":"0nBAqBAA,KAAKC,iBAAiB,WAAYC,IAC5BA,EAAMC,MAA4B,iBAApBD,EAAMC,KAAKC,MAC3BJ,KAAKK,aACP,IAWFC,EAAAA,iBAAoC,CAClC,CACEC,IAAO,SACPC,SAAY,oCAEd,CACED,IAAO,aACPC,SAAY,oCAEd,CACED,IAAO,gBACPC,SAAY,qCAEb,CAAE,GAKwBC,EAAAC,cAAC,0BAA2B,IAAIC,uBAA2C"}
+{
+  "version": 3,
+  "file": "service-worker.js",
+  "sources": [
+    "../../../AppData/Local/Temp/1ab90a66a851f1fcb5117bb1fc433f01/service-worker.js"
+  ],
+  "sourcesContent": [
+    "import {registerRoute as workbox_routing_registerRoute} from 'C:/Users/sepeh/projects/uni/car-parts/node_modules/workbox-routing/registerRoute.mjs';\nimport {StaleWhileRevalidate as workbox_strategies_StaleWhileRevalidate} from 'C:/Users/sepeh/projects/uni/car-parts/node_modules/workbox-strategies/StaleWhileRevalidate.mjs';\nimport {precacheAndRoute as workbox_precaching_precacheAndRoute} from 'C:/Users/sepeh/projects/uni/car-parts/node_modules/workbox-precaching/precacheAndRoute.mjs';/**\n * Welcome to your Workbox-powered service worker!\n *\n * You'll need to register this file in your web app.\n * See https://goo.gl/nhQhGp\n *\n * The rest of the code is auto-generated. Please don't update this file\n * directly; instead, make changes to your Workbox build configuration\n * and re-run your build process.\n * See https://goo.gl/2aRDsh\n */\n\n\n\n\n\n\n\n\nself.addEventListener('message', (event) => {\n  if (event.data && event.data.type === 'SKIP_WAITING') {\n    self.skipWaiting();\n  }\n});\n\n\n\n\n/**\n * The precacheAndRoute() method efficiently caches and responds to\n * requests for URLs in the manifest.\n * See https://goo.gl/S9QRab\n */\nworkbox_precaching_precacheAndRoute([\n  {\n    \"url\": \"app.js\",\n    \"revision\": \"d41d8cd98f00b204e9800998ecf8427e\"\n  },\n  {\n    \"url\": \"index.html\",\n    \"revision\": \"c6771b679e433e2deb618028a819a572\"\n  },\n  {\n    \"url\": \"manifest.json\",\n    \"revision\": \"b682fead3ac5416acec2666d45c083f3\"\n  }\n], {});\n\n\n\n\nworkbox_routing_registerRoute(/\\.(?:html|js|css|wasm)$/, new workbox_strategies_StaleWhileRevalidate(), 'GET');\n\n\n\n\n"
+  ],
+  "names": [
+    "self",
+    "addEventListener",
+    "event",
+    "data",
+    "type",
+    "skipWaiting",
+    "workbox_precaching_precacheAndRoute",
+    "url",
+    "revision",
+    "workbox",
+    "registerRoute",
+    "workbox_strategies_StaleWhileRevalidate"
+  ],
+  "mappings": "0nBAqBAA,KAAKC,iBAAiB,WAAYC,IAC5BA,EAAMC,MAA4B,iBAApBD,EAAMC,KAAKC,MAC3BJ,KAAKK,aACP,IAWFC,EAAAA,iBAAoC,CAClC,CACEC,IAAO,SACPC,SAAY,oCAEd,CACED,IAAO,aACPC,SAAY,oCAEd,CACED,IAAO,gBACPC,SAAY,qCAEb,CAAE,GAKwBC,EAAAC,cAAC,0BAA2B,IAAIC,uBAA2C"
+}

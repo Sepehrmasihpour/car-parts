@@ -1,1 +1,25 @@
+# Node modules and build output
 node_modules/
+dist/
+build/
+
+# Workbox-generated service worker (if you regenerate it)
+public/service-worker.js
+
+# Local environment files
+.env
+.env.local
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+public/data/
