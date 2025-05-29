@@ -1,56 +1,94 @@
-// File: src/App.jsx
+// File: src/App.tsx
 import React, { useState, useEffect } from "react";
-import initSqlJs from "sql.js";
+import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import "./App.css";
 
-const App = () => {
-  const [db, setDb] = useState(null);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("cars");
-  const [results, setResults] = useState([]);
-  const [view, setView] = useState("search"); // 'search' | 'car' | 'part'
-  const [details, setDetails] = useState(null);
+interface CarDetails {
+  title: string;
+  type: "car" | "part";
+  data: (string | number | boolean)[][];
+}
+
+const App: React.FC = () => {
+  const [db, setDb] = useState<Database | null>(null);
+  const [search, setSearch] = useState<string>("");
+  const [filter, setFilter] = useState<"cars" | "parts">("cars");
+  const [results, setResults] = useState<(string | number)[][]>([]);
+  const [view, setView] = useState<"search" | "details">("search");
+  const [details, setDetails] = useState<CarDetails | null>(null);
+  const [searchclicked, setClicked] = useState<boolean>(false);
 
   useEffect(() => {
-    initSqlJs({ locateFile: (file) => `https://sql.js.org/dist/${file}` }).then(
-      (SQL) => {
-        const db = new SQL.Database();
-        db.run(`
-          CREATE TABLE car_models (id INTEGER PRIMARY KEY, name TEXT);
-          CREATE TABLE car_parts (id INTEGER PRIMARY KEY, part_number TEXT, name TEXT, car_id INTEGER);
-          CREATE TABLE car_part_models (car_id INTEGER, part_id INTEGER);
-  
-          INSERT INTO car_models (id, name) VALUES
-            (1, 'Toyota Corolla'),
-            (2, 'Peugeot 206');
-  
-          INSERT INTO car_parts (id, part_number, name, car_id) VALUES
-            (1, 'BP-1001', 'Brake Pad', 1),
-            (2, 'OF-206', 'Oil Filter', 2),
-            (3, 'TB-999', 'Timing Belt', 1);
-  
-          INSERT INTO car_part_models (car_id, part_id) VALUES
-            (1, 1), (2, 2), (1, 3), (2, 3); -- Timing Belt fits both
-        `);
-        setDb(db);
-      }
-    );
+    initSqlJs({
+      locateFile: (file: any) => `https://sql.js.org/dist/${file}`,
+    }).then((SQL: SqlJsStatic) => {
+      const db = new SQL.Database();
+      db.run(`
+        CREATE TABLE car_models (id INTEGER PRIMARY KEY, name TEXT);
+        CREATE TABLE car_parts (id INTEGER PRIMARY KEY, part_number TEXT, name TEXT, car_id INTEGER);
+        CREATE TABLE car_part_models (car_id INTEGER, part_id INTEGER);
+
+        INSERT INTO car_models (id, name) VALUES
+          (1, 'Toyota Corolla'),
+          (2, 'Peugeot 206');
+
+        INSERT INTO car_parts (id, part_number, name, car_id) VALUES
+          (1, 'BP-1001', 'Brake Pad', 1),
+          (2, 'OF-206', 'Oil Filter', 2),
+          (3, 'TB-999', 'Timing Belt', 1);
+
+        INSERT INTO car_part_models (car_id, part_id) VALUES
+          (1, 1), (2, 2), (1, 3), (2, 3);
+      `);
+      setDb(db);
+    });
   }, []);
 
-  const handleSearch = () => {
-    if (!db) return;
-    let res = [];
+  useEffect(() => {
+    if (!db || !searchclicked) return;
+
+    let res;
     if (filter === "cars") {
-      res = db.exec(`SELECT * FROM car_models WHERE name LIKE '%${search}%'`);
+      res = db.exec(
+        search === ""
+          ? `SELECT * FROM car_models`
+          : `SELECT * FROM car_models WHERE name LIKE '%${search}%'`
+      );
     } else {
       res = db.exec(
-        `SELECT * FROM car_parts WHERE part_number LIKE '%${search}%'`
+        search === ""
+          ? `SELECT * FROM car_parts`
+          : `SELECT * FROM car_parts WHERE part_number LIKE '%${search}%'`
       );
     }
     setResults(res[0]?.values || []);
+  }, [filter]);
+
+  const handleSearch = (): void => {
+    if (!db) return;
+
+    let res;
+    if (filter === "cars") {
+      res = db.exec(
+        search === ""
+          ? `SELECT * FROM car_models`
+          : `SELECT * FROM car_models WHERE name LIKE '%${search}%'`
+      );
+      setClicked(true);
+    } else {
+      res = db.exec(
+        search === ""
+          ? `SELECT * FROM car_parts`
+          : `SELECT * FROM car_parts WHERE part_number LIKE '%${search}%'`
+      );
+      setClicked(true);
+    }
+
+    setResults(res[0]?.values || []);
   };
 
-  const handleSelect = (item) => {
+  const handleSelect = (item: (string | number)[]): void => {
+    if (!db) return;
     if (filter === "cars") {
       const [id, name] = item;
       const parts = db.exec(`
@@ -59,8 +97,13 @@ const App = () => {
         JOIN car_part_models cpm ON cpm.part_id = cp.id
         WHERE cpm.car_id = ${id};
       `);
-      setDetails({ title: name, type: "car", data: parts[0]?.values || [] });
+      setDetails({
+        title: String(name),
+        type: "car",
+        data: parts[0]?.values || [],
+      });
       setView("details");
+      setClicked(false);
     } else {
       const [id, part_number, name, car_id] = item;
       const cars = db.exec(`
@@ -75,7 +118,14 @@ const App = () => {
         data: cars[0]?.values || [],
       });
       setView("details");
+      setClicked(false);
     }
+  };
+
+  const handleBack = (): void => {
+    setView("search");
+    setClicked(false);
+    setResults([]);
   };
 
   return (
@@ -97,7 +147,7 @@ const App = () => {
                   name="filter"
                   value={option}
                   checked={filter === option}
-                  onChange={() => setFilter(option)}
+                  onChange={() => setFilter(option as "cars" | "parts")}
                 />{" "}
                 {option === "cars" ? "Cars" : "Car Parts"}
               </label>
@@ -120,12 +170,12 @@ const App = () => {
         </>
       ) : (
         <>
-          <button onClick={() => setView("search")} className="back-button">
+          <button onClick={() => handleBack()} className="back-button">
             ⬅ Back
           </button>
-          <h2 className="details-title">{details.title}</h2>
+          <h2 className="details-title">{details?.title}</h2>
           <ul className="details-list">
-            {details.data.map((row, idx) => (
+            {details?.data.map((row, idx) => (
               <li key={idx} className="details-item">
                 {details.type === "car"
                   ? `${row[0]} (${row[1]}) ${row[2] ? "(Primary)" : ""}`
