@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import initSqlJs, { Database, SqlJsStatic } from "sql.js";
+import initSqlJs, { Database } from "sql.js";
 import "./App.css";
 
 interface CarDetails {
@@ -21,48 +21,25 @@ const App: React.FC = () => {
 
   // Initialize database
   useEffect(() => {
-    initSqlJs({ locateFile: (file) => `https://sql.js.org/dist/${file}` })
-      .then((SQL: SqlJsStatic) => {
-        const database = new SQL.Database();
-        try {
-          database.run(`
-            CREATE TABLE car_models (
-              id INTEGER PRIMARY KEY,
-              name TEXT
-            );
-            CREATE TABLE car_parts (
-              id INTEGER PRIMARY KEY,
-              part_number TEXT,
-              name TEXT
-            );
-            CREATE TABLE car_part_models (
-              car_id INTEGER,
-              part_id INTEGER
-            );
+    const loadDb = async () => {
+      try {
+        const res = await fetch("/carparts.db");
+        const buffer = await res.arrayBuffer();
 
-            INSERT INTO car_models (id, name) VALUES
-              (1, 'Toyota Corolla'),
-              (2, 'Peugeot 206');
+        const SQL = await initSqlJs({
+          locateFile: (f) => `https://sql.js.org/dist/${f}`,
+        });
 
-            INSERT INTO car_parts (id, part_number, name) VALUES
-              (1, 'BP-1001', 'Brake Pad'),
-              (2, 'OF-206', 'Oil Filter'),
-              (3, 'TB-999', 'Timing Belt');
-
-            INSERT INTO car_part_models (car_id, part_id) VALUES
-              (1, 1), (2, 2), (1, 3), (2, 3);
-          `);
-          setDb(database);
-        } catch (e: any) {
-          setError(e.message);
-        } finally {
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
+        const db = new SQL.Database(new Uint8Array(buffer));
+        setDb(db);
+        setLoading(false);
+      } catch (e: any) {
         setError(e.message);
         setLoading(false);
-      });
+      }
+    };
+
+    loadDb(); // run the async function
   }, []);
 
   // Shared search helper
