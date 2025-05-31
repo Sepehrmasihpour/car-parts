@@ -12,6 +12,7 @@
     "clean-db": "node scripts/clean-db.js"
   },
   "dependencies": {
+    "idb-keyval": "^6.2.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "sql.js": "^1.13.0"
