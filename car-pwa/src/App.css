@@ -69,3 +69,7 @@
   border: 1px solid #ddd;
   margin-bottom: 0.5rem;
 }
+
+.add-button {
+  margin-bottom: 10px;
+}

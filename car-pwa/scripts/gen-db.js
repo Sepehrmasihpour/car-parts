@@ -32,7 +32,7 @@ for (const file of files) {
     defval: "",
   });
 
-  for (const [id, pn, partName, designedFor, compatibleStr] of rows.slice(1)) {
+  for (const [id, pn, designedFor, partName, compatibleStr] of rows.slice(1)) {
     const partId = Number(id);
 
     // insert part
@@ -53,7 +53,7 @@ for (const file of files) {
 
     // link designedFor
     db.prepare(
-      `INSERT OR IGNORE INTO car_part_models (car_id, part_id) VALUES (?, ?)`
+      `INSERT OR REPLACE INTO car_part_models (car_id, part_id, is_primary) VALUES (?, ?, 1)`
     ).run(carId, partId);
 
     // other compatible cars
@@ -67,8 +67,9 @@ for (const file of files) {
       const cid = db
         .prepare(`SELECT id FROM car_models WHERE name = ?`)
         .get(model).id;
+
       db.prepare(
-        `INSERT OR IGNORE INTO car_part_models (car_id, part_id) VALUES (?, ?)`
+        `INSERT OR IGNORE INTO car_part_models (car_id, part_id, is_primary) VALUES (?, ?, 0)`
       ).run(cid, partId);
     }
   }
