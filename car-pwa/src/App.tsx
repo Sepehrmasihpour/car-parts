@@ -46,7 +46,7 @@ const App: React.FC = () => {
       try {
         // 1a. Initialize sql.js (loads the WASM)
         const SQL = await initSqlJs({
-          locateFile: (filename) => `https://sql.js.org/dist/${filename}`,
+          locateFile: (filename: any) => `https://sql.js.org/dist/${filename}`,
         });
 
         // 1b. Try retrieving our saved Uint8Array from IndexedDB
