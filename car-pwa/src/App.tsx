@@ -488,12 +488,14 @@ const App: React.FC = () => {
   // 8c. “Details” View
   return (
     <div className="container">
-      <button onClick={handleDelete} className="delete-button">
-        ❌ Delete
-      </button>
-      <button onClick={handleBack} className="back-button">
-        ⬅ Back
-      </button>
+      <div className="details-header">
+        <button onClick={handleBack} className="back-button">
+          ⬅ Back
+        </button>
+        <button onClick={handleDelete} className="delete-button">
+          ❌ Delete
+        </button>
+      </div>
       <h2 className="details-title">{details?.title}</h2>
       <ul className="details-list">
         {details?.data.map((row, idx) => (

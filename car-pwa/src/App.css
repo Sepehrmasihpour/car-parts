@@ -102,3 +102,10 @@
 .select-item {
   border-bottom: 1px solid #eee; /* light divider */
 }
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem; /* optional spacing below the buttons */
+}
