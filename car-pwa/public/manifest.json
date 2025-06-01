@@ -1,0 +1,16 @@
+{
+  "name": "Car Parts PWA",
+  "short_name": "CarParts",
+  "description": "Browse, search, and manage car parts and models offline.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976d2",
+  "icons": [
+    {
+      "src": "/icons8-car-50.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
